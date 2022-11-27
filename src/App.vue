@@ -1,18 +1,17 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div>
+    <button @click="test">aaa</button>
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+<script lang="ts" setup>
+// import { solve } from "sat-solver";
 
-export default defineComponent({
-  name: "App",
-  components: {
-    HelloWorld,
-  },
-});
+import solver from "@/utils/Solver";
+const test = () => {
+  const ans = solver();
+  console.log(ans);
+};
 </script>
 
 <style>
