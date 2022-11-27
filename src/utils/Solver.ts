@@ -14,7 +14,10 @@ export default (text: string): number[][] => {
     })
     .join(" & ");
 
+  console.log(logic);
+
   const answers = solve(logic).findAll();
+  // const answers = solve(logic).getAstTree();
 
   return answers.map((ans: any) =>
     Object.keys(ans)

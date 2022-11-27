@@ -56,11 +56,6 @@ import text from "raw-loader!./cnfFiles/cnf1.cnf";
 import solver from "@/utils/Solver";
 import sudoku2cnf from "@/utils/Sudoku2Cnf";
 import { reactive, ref } from "vue";
-const test = () => {
-  const ans = solver(text);
-  console.log(ans);
-  console.log(text);
-};
 const phase = ref<number>(0);
 const dialogNum = ref<number>(0);
 const field = reactive<number[]>([...Array(81)].fill(0));
@@ -73,6 +68,7 @@ const search = () => {
   memory.length = 0;
   memory.push(...field);
   const cnf = sudoku2cnf(field);
+  console.log(cnf);
   const ans = solver(cnf);
   phase.value = 1;
   console.log(ans);
