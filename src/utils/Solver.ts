@@ -1,5 +1,5 @@
 import { solve } from "sat-solver";
-export default (text: string): number[][] => {
+export default (text: string): number[] => {
   const textRow = text.split("\n");
 
   const logic = textRow
@@ -14,14 +14,9 @@ export default (text: string): number[][] => {
     })
     .join(" & ");
 
-  console.log(logic);
+  const answers = solve(logic).findOne();
 
-  const answers = solve(logic).findAll();
-  // const answers = solve(logic).getAstTree();
-
-  return answers.map((ans: any) =>
-    Object.keys(ans)
-      .filter((key) => ans[key])
-      .map((filteredKey) => Number(filteredKey.slice(1)))
-  );
+  return Object.keys(answers)
+    .filter((key) => answers[key])
+    .map((filteredKey) => Number(filteredKey.slice(1)));
 };

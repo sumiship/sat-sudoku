@@ -1,32 +1,33 @@
 <template>
   <div class="container">
-    <div class="field">
-      <div class="row" v-for="row of 9" :key="`row${row}`">
+    <div class="field" :class="{ error: phase === 2 }">
+      <div class="row" v-for="row of 4" :key="`row${row}`">
         <div
           class="col"
-          v-for="col of 9"
+          v-for="col of 4"
           :key="`row${row}col${col}`"
-          @click="phase === 0 && (dialogNum = row * 9 + col)"
+          @click="phase === 0 && (dialogNum = row * 4 + col)"
+          :class="{ setted: memory[(row - 1) * 4 + (col - 1)] !== 0 }"
         >
           <teleport to="body">
             <div
               class="dialog"
-              v-show="dialogNum === row * 9 + col"
+              v-show="dialogNum === row * 4 + col"
               @click.self="dialogNum = 0"
             >
               <div class="contents">
                 <div class="numbers">
                   <div
                     class="number-select"
-                    v-for="num of 9"
+                    v-for="num of 4"
                     :key="`select-row${row}col${col}num${num}`"
-                    @click="setNumber((row - 1) * 9 + (col - 1), num)"
+                    @click="setNumber((row - 1) * 4 + (col - 1), num)"
                   >
                     {{ num }}
                   </div>
                 </div>
                 <div
-                  @click="setNumber((row - 1) * 9 + (col - 1), 0)"
+                  @click="setNumber((row - 1) * 4 + (col - 1), 0)"
                   class="erase"
                 >
                   消す
@@ -35,9 +36,9 @@
             </div>
           </teleport>
           {{
-            field[(row - 1) * 9 + (col - 1)] === 0
+            field[(row - 1) * 4 + (col - 1)] === 0
               ? ""
-              : field[(row - 1) * 9 + (col - 1)]
+              : field[(row - 1) * 4 + (col - 1)]
           }}
         </div>
       </div>
@@ -46,7 +47,7 @@
       <div class="control-button" v-show="phase === 0" @click="search">
         search
       </div>
-      <div class="control-button" v-show="phase === 1" @click="set">set</div>
+      <div class="control-button" v-show="phase >= 1" @click="set">set</div>
     </div>
   </div>
 </template>
@@ -58,20 +59,27 @@ import sudoku2cnf from "@/utils/Sudoku2Cnf";
 import { reactive, ref } from "vue";
 const phase = ref<number>(0);
 const dialogNum = ref<number>(0);
-const field = reactive<number[]>([...Array(81)].fill(0));
+const field = reactive<number[]>([...Array(16)].fill(0));
 const setNumber = (index: number, num: number) => {
   field[index] = num;
+  memory[index] = num;
   dialogNum.value = 0;
 };
-const memory: number[] = [];
+const memory: number[] = [...Array(16)].fill(0);
 const search = () => {
-  memory.length = 0;
-  memory.push(...field);
   const cnf = sudoku2cnf(field);
-  console.log(cnf);
-  const ans = solver(cnf);
-  phase.value = 1;
-  console.log(ans);
+  let ans: number[] = [];
+  try {
+    ans = solver(cnf);
+    phase.value = 1;
+  } catch (e) {
+    phase.value = 2;
+  }
+  ans.forEach((number) => {
+    const num = ((number - 1) % 4) + 1;
+    const index = Math.floor((number - 1) / 4);
+    field[index] = num;
+  });
 };
 const set = () => {
   field.length = 0;
@@ -105,41 +113,55 @@ const set = () => {
 }
 .control {
   height: 100px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
   background-color: rgb(129, 236, 236);
   margin-top: 100px;
   cursor: pointer;
   font-size: 30px;
 }
+.control-button {
+  height: 100%;
+  line-height: 100px;
+}
 .field {
-  height: 600px;
-  border: solid 3px black;
+  border-color: #2c3e50;
+  border: solid 3px;
+}
+.field.error {
+  border-color: red;
 }
 .row {
   display: flex;
-  height: calc(600px / 9);
+  height: calc(600px / 4);
 }
 .row:not(:last-child) {
-  border-bottom: solid 1px black;
+  border-bottom: solid 1px;
 }
-.row:nth-child(3n) {
+.row:nth-child(2n) {
   border-width: 3px;
 }
+.field.error .row {
+  border-color: red;
+}
 .col {
-  width: calc(600px / 9);
+  width: calc(600px / 4);
   text-align: center;
-  line-height: calc(600px / 9);
+  line-height: calc(600px / 4);
   cursor: pointer;
   font-size: 20px;
   font-weight: bold;
+  color: blue;
+}
+.col.setted {
+  color: #2c3e50;
 }
 .col:not(:last-child) {
-  border-right: solid 1px black;
+  border-right: solid 1px #2c3e50;
 }
-.col:nth-child(3n) {
+.col:nth-child(2n) {
   border-width: 3px;
+}
+.field.error .col {
+  border-color: red;
 }
 .dialog {
   cursor: pointer;
@@ -168,9 +190,9 @@ const set = () => {
   gap: 3px;
 }
 .number-select {
-  width: calc(380px / 3 - 10px);
-  height: calc(380px / 3 - 10px);
-  line-height: calc(380px / 3 - 10px);
+  width: calc(380px / 2 - 10px);
+  height: calc(380px / 2 - 10px);
+  line-height: calc(380px / 2 - 10px);
   font-size: 20px;
   text-align: center;
   background-color: azure;
