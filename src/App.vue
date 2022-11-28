@@ -216,4 +216,44 @@ const set = () => {
 .erase:hover {
   background-color: rgb(247, 128, 98);
 }
+
+@media screen and (max-width: 480px) {
+  .container {
+    width: 320px;
+  }
+  .control {
+    height: 50px;
+    margin-top: 50px;
+    font-size: 20px;
+  }
+  .control-button {
+    line-height: 50px;
+  }
+  .row {
+    display: flex;
+    height: calc(320px / 4);
+  }
+  .col {
+    width: calc(320px / 4);
+    line-height: calc(320px / 4);
+    font-size: 30px;
+  }
+  .contents {
+    width: 300px;
+  }
+  .number-select {
+    width: calc(280px / 2 - 10px);
+    height: calc(280px / 2 - 10px);
+    line-height: calc(280px / 2 - 10px);
+    font-size: 30px;
+  }
+  .erase {
+    margin: 6px auto 0;
+    padding: 6px 0;
+    width: 1000px;
+    text-align: center;
+    font-size: 20px;
+    width: 70px;
+  }
+}
 </style>
