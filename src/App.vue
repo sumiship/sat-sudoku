@@ -30,7 +30,7 @@
                   @click="setNumber((row - 1) * 4 + (col - 1), 0)"
                   class="erase"
                 >
-                  消す
+                  未選択
                 </div>
               </div>
             </div>
@@ -147,7 +147,7 @@ const set = () => {
   text-align: center;
   line-height: calc(600px / 4);
   cursor: pointer;
-  font-size: 20px;
+  font-size: 40px;
   font-weight: bold;
   color: blue;
 }
@@ -193,7 +193,7 @@ const set = () => {
   width: calc(380px / 2 - 10px);
   height: calc(380px / 2 - 10px);
   line-height: calc(380px / 2 - 10px);
-  font-size: 20px;
+  font-size: 40px;
   text-align: center;
   background-color: azure;
   border: 3px solid rgb(196, 248, 248);
@@ -204,9 +204,16 @@ const set = () => {
 }
 .erase {
   cursor: pointer;
-  background-color: rgb(247, 128, 98);
+  background-color: rgb(251, 195, 181);
+  border: 3px solid rgb(247, 128, 98);
+  border-radius: 10px;
   margin: 8px auto 0;
-  width: 100px;
+  padding: 10px 0;
+  width: 130px;
   text-align: center;
+  font-size: 30px;
+}
+.erase:hover {
+  background-color: rgb(247, 128, 98);
 }
 </style>
