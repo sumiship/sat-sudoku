@@ -10,7 +10,7 @@ export default (field: number[]): string => {
   return ans;
 };
 
-// 数独のルールを示す論理式を作る
+// 数独のルールを示すcnfを作る
 const rule = (): string[] => {
   const sections: string[] = [];
   // 各マスに1~9のいずれかが入るというルール
@@ -56,7 +56,5 @@ const rule = (): string[] => {
       }
     }
   });
-  // console.log(sections.length);
-  // console.log(sections.join("\n"));
   return sections;
 };
